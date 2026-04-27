@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Campus Navigation – User Survey</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1a73e8;
+    --blue-light: #e8f0fe;
+    --blue-dark: #1557b0;
+    --purple: #673ab7;
+    --red: #d93025;
+    --green: #188038;
+    --surface: #ffffff;
+    --bg: #f0ebf8;
+    --border: #dadce0;
+    --text: #202124;
+    --text2: #5f6368;
+    --radius: 8px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+    --shadow-hover: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    padding: 24px 16px 60px;
+    color: var(--text);
+  }
+
+  .form-container {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* Header card */
+  .header-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 12px;
+    border-top: 10px solid var(--purple);
+  }
+
+  .header-inner {
+    padding: 24px;
+  }
+
+  .header-title {
+    font-family: 'Google Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .header-subtitle {
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 16px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--blue-light);
+    color: var(--blue-dark);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .header-desc {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.6;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .required-note {
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 8px;
+  }
+
+  .required-note span { color: var(--red); }
+
+  /* Section header */
+  .section-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px 12px;
+    margin-bottom: 12px;
+    border-top: 4px solid var(--blue);
+  }
+
+  .section-title {
+    font-family: 'Google Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  /* Question card */
+  .q-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 12px;
+    transition: box-shadow 0.2s;
+    border-left: 4px solid transparent;
+  }
+
+  .q-card:focus-within {
+    box-shadow: var(--shadow-hover);
+    border-left-color: var(--blue);
+  }
+
+  .q-label {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 16px;
+    line-height: 1.5;
+    display: flex;
+    gap: 4px;
+  }
+
+  .q-label .req { color: var(--red); margin-left: 2px; }
+
+  /* Radio options */
+  .options { display: flex; flex-direction: column; gap: 4px; }
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+
+  .option:hover { background: var(--blue-light); }
+
+  .option input[type="radio"],
+  .option input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #757575;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .option input[type="checkbox"] {
+    border-radius: 3px;
+  }
+
+  .option input[type="radio"]:checked {
+    border-color: var(--blue);
+    border-width: 5px;
+  }
+
+  .option input[type="checkbox"]:checked {
+    border-color: var(--blue);
+    background: var(--blue);
+  }
+
+  .option input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: -1px;
+    width: 10px;
+    height: 6px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(-45deg);
+  }
+
+  .option label {
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+    flex: 1;
+  }
+
+  /* Text input */
+  .text-input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    padding: 8px 0;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    color: var(--text);
+    outline: none;
+    background: transparent;
+    transition: border-color 0.2s;
+  }
+
+  .text-input:focus {
+    border-bottom: 2px solid var(--blue);
+  }
+
+  .text-input::placeholder { color: #9aa0a6; }
+
+  textarea.text-input {
+    resize: none;
+    min-height: 80px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin-top: 4px;
+  }
+
+  textarea.text-input:focus {
+    border: 2px solid var(--blue);
+  }
+
+  /* Rating scale */
+  .rating-scale {
+    display: flex;
+    gap: 0;
+    margin-top: 8px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .rating-item {
+    flex: 1;
+    text-align: center;
+    padding: 12px 4px;
+    cursor: pointer;
+    border-right: 1px solid var(--border);
+    transition: background 0.15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .rating-item:last-child { border-right: none; }
+  .rating-item:hover { background: var(--blue-light); }
+
+  .rating-item input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #757575;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .rating-item input[type="radio"]:checked {
+    border-color: var(--blue);
+    border-width: 5px;
+  }
+
+  .rating-item .rating-label {
+    font-size: 11px;
+    color: var(--text2);
+    line-height: 1.3;
+  }
+
+  .rating-item .rating-num {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .rating-ends {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 6px;
+    padding: 0 4px;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--border);
+    height: 4px;
+    border-radius: 2px;
+    margin: 16px 0 8px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--blue);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  .progress-text {
+    font-size: 12px;
+    color: var(--text2);
+    text-align: right;
+    margin-bottom: 16px;
+  }
+
+  /* Navigation buttons */
+  .nav-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+  }
+
+  .btn {
+    padding: 10px 24px;
+    border-radius: 4px;
+    font-family: 'Google Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--blue);
+    color: white;
+  }
+
+  .btn-primary:hover { background: var(--blue-dark); box-shadow: 0 1px 4px rgba(26,115,232,0.4); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--blue);
+  }
+
+  .btn-secondary:hover { background: var(--blue-light); }
+
+  .btn-clear {
+    background: transparent;
+    color: var(--text2);
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .btn-clear:hover { color: var(--red); background: #fce8e6; }
+
+  /* Submitted state */
+  .submitted-card {
+    display: none;
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 40px 24px;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .submitted-icon {
+    width: 64px;
+    height: 64px;
+    background: #e6f4ea;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 28px;
+  }
+
+  .submitted-title {
+    font-family: 'Google Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .submitted-desc {
+    font-size: 14px;
+    color: var(--text2);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  /* Page sections */
+  .page { display: block; }
+
+  /* Error state */
+  .q-card.error { border-left-color: var(--red); }
+  .error-msg { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
+  .q-card.error .error-msg { display: block; }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-card {
+    animation: fadeIn 0.3s ease both;
+  }
+
+  /* Google footer */
+  .google-footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--text2);
+  }
+
+  .google-footer a { color: var(--blue); text-decoration: none; }
+
+  @media (max-width: 480px) {
+    .rating-scale { flex-wrap: wrap; }
+    .rating-item { min-width: 33%; }
+    .header-title { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="form-container">
+
+  <!-- Header -->
+  <div class="header-card">
+    <div class="header-inner">
+      <div class="header-title">🎓 Smart Campus Navigation – User Research Survey</div>
+      <div class="header-subtitle">
+        <span class="header-badge">📚 DTI Project</span>
+        <span class="header-badge">⏱ 5–7 minutes</span>
+        <span class="header-badge">🔒 Anonymous</span>
+      </div>
+      <div class="header-desc">
+        This survey is part of our Design Thinking & Innovation project. We are building a <strong>Smart Campus Navigation Web App</strong> for engineering students and need your honest feedback to understand navigation challenges on campus.
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text" id="progressText">Page 1 of 5</div>
+
+  <!-- PAGE 1: Basic Info -->
+  <div class="page active" id="page1">
+    <div class="section-card">
+      <div class="section-title">Section 1: Basic Information</div>
+    </div>
+
+    <div class="q-card" id="q1">
+      <div class="q-label">What is your current year of study? <span class="req">*</span></div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q1" value="1st Year"><label>1st Year</label></label>
+        <label class="option"><input type="radio" name="q1" value="2nd Year"><label>2nd Year</label></label>
+        <label class="option"><input type="radio" name="q1" value="3rd Year"><label>3rd Year</label></label>
+        <label class="option"><input type="radio" name="q1" value="4th Year"><label>4th Year</label></label>
+        <label class="option"><input type="radio" name="q1" value="Faculty/Staff"><label>Faculty / Staff</label></label>
+        <label class="option"><input type="radio" name="q1" value="Visitor"><label>Visitor</label></label>
+      </div>
+      <div class="error-msg">⚠ This is a required question.</div>
+    </div>
+
+    <div class="q-card" id="q2">
+      <div class="q-label">What is your department / branch? <span class="req">*</span></div>
+      <input type="text" class="text-input" id="q2input" placeholder="e.g. CSE, ECE, Mechanical, Civil...">
+      <div class="error-msg">⚠ This is a required question.</div>
+    </div>
+
+    <div class="q-card" id="q3">
+      <div class="q-label">How long have you been at this campus? <span class="req">*</span></div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q3" value="< 1 month"><label>Less than 1 month</label></label>
+        <label class="option"><input type="radio" name="q3" value="1-6 months"><label>1 – 6 months</label></label>
+        <label class="option"><input type="radio" name="q3" value="6-12 months"><label>6 months – 1 year</label></label>
+        <label class="option"><input type="radio" name="q3" value="> 1 year"><label>More than 1 year</label></label>
+      </div>
+      <div class="error-msg">⚠ This is a required question.</div>
+    </div>
+  </div>
+
+  <!-- PAGE 2: Navigation Experience -->
+  <div class="page" id="page2">
+    <div class="section-card">
+      <div class="section-title">Section 2: Navigation Experience</div>
+    </div>
+
+    <div class="q-card" id="q4">
+      <div class="q-label">How often do you have difficulty finding a location on campus? <span class="req">*</span></div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q4" value="Never"><label>Never</label></label>
+        <label class="option"><input type="radio" name="q4" value="Rarely"><label>Rarely (once a month)</label></label>
+        <label class="option"><input type="radio" name="q4" value="Sometimes"><label>Sometimes (once a week)</label></label>
+        <label class="option"><input type="radio" name="q4" value="Often"><label>Often (multiple times a week)</label></label>
+        <label class="option"><input type="radio" name="q4" value="Always"><label>Always</label></label>
+      </div>
+      <div class="error-msg">⚠ This is a required question.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Which locations are hardest to find? <em style="color:#5f6368;font-size:13px">(Select all that apply)</em></div>
+      <div class="options">
+        <label class="option"><input type="checkbox" name="q5" value="Classrooms"><label>Classrooms / Lecture Halls</label></label>
+        <label class="option"><input type="checkbox" name="q5" value="Labs"><label>Labs & Workshops</label></label>
+        <label class="option"><input type="checkbox" name="q5" value="Faculty"><label>Faculty Cabins / HOD Office</label></label>
+        <label class="option"><input type="checkbox" name="q5" value="Admin"><label>Admin Block / Exam Cell</label></label>
+        <label class="option"><input type="checkbox" name="q5" value="Hostel/Canteen"><label>Hostels / Canteen / Sports Ground</label></label>
+        <label class="option"><input type="checkbox" name="q5" value="Other Buildings"><label>Other Buildings / Blocks</label></label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">How do you currently navigate the campus? <em style="color:#5f6368;font-size:13px">(Select all that apply)</em></div>
+      <div class="options">
+        <label class="option"><input type="checkbox" name="q6" value="Ask someone"><label>Ask someone nearby</label></label>
+        <label class="option"><input type="checkbox" name="q6" value="Google Maps"><label>Use Google Maps</label></label>
+        <label class="option"><input type="checkbox" name="q6" value="Wander"><label>Wander around and find it</label></label>
+        <label class="option"><input type="checkbox" name="q6" value="Memory"><label>I already know the campus by memory</label></label>
+        <label class="option"><input type="checkbox" name="q6" value="Printed map"><label>Use printed campus map (if available)</label></label>
+      </div>
+    </div>
+
+    <div class="q-card" id="q7">
+      <div class="q-label">Rate how easy it is to navigate our campus overall: <span class="req">*</span></div>
+      <div class="rating-scale">
+        <label class="rating-item"><input type="radio" name="q7" value="1"><span class="rating-num">1</span><span class="rating-label">Very<br>Difficult</span></label>
+        <label class="rating-item"><input type="radio" name="q7" value="2"><span class="rating-num">2</span><span class="rating-label"></span></label>
+        <label class="rating-item"><input type="radio" name="q7" value="3"><span class="rating-num">3</span><span class="rating-label">Okay</span></label>
+        <label class="rating-item"><input type="radio" name="q7" value="4"><span class="rating-num">4</span><span class="rating-label"></span></label>
+        <label class="rating-item"><input type="radio" name="q7" value="5"><span class="rating-num">5</span><span class="rating-label">Very<br>Easy</span></label>
+      </div>
+      <div class="error-msg">⚠ This is a required question.</div>
+    </div>
+  </div>
+
+  <!-- PAGE 3: Pain Points -->
+  <div class="page" id="page3">
+    <div class="section-card">
+      <div class="section-title">Section 3: Pain Points</div>
+    </div>
+
+    <div class="q-card" id="q8">
+      <div class="q-label">What is the biggest challenge you face while navigating campus? <span class="req">*</span></div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q8" value="No labels"><label>Buildings / rooms are not labeled clearly</label></label>
+        <label class="option"><input type="radio" name="q8" value="Similar buildings"><label>Too many similar-looking buildings</label></label>
+        <label class="option"><input type="radio" name="q8" value="No signboards"><label>No proper signboards or maps available</label></label>
+        <label class="option"><input type="radio" name="q8" value="Indoor navigation"><label>Hard to find indoor locations (floors / rooms)</label></label>
+        <label class="option"><input type="radio" name="q8" value="New to campus"><label>New to campus — don't know the layout at all</label></label>
+        <label class="option"><input type="radio" name="q8" value="Other"><label>Other</label></label>
+      </div>
+      <div class="error-msg">⚠ This is a required question.</div>
+    </div>
+
+    <div class="q-card" id="q9">
+      <div class="q-label">Have you ever been late to class because you couldn't find the location? <span class="req">*</span></div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q9" value="Yes multiple"><label>Yes, multiple times</label></label>
+        <label class="option"><input type="radio" name="q9" value="Yes once"><label>Yes, once or twice</label></label>
+        <label class="option"><input type="radio" name="q9" value="Close"><label>No, but I was close to being late</label></label>
+        <label class="option"><input type="radio" name="q9" value="Never"><label>No, never</label></label>
+      </div>
+      <div class="error-msg">⚠ This is a required question.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Describe a time you got lost or had trouble finding a campus location:</div>
+      <textarea class="text-input" placeholder="Tell us what happened..." rows="4"></textarea>
+    </div>
+  </div>
+
+  <!-- PAGE 4: App Features -->
+  <div class="page" id="page4">
+    <div class="section-card">
+      <div class="section-title">Section 4: App Feature Preferences</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Which features would be MOST useful in a campus navigation app? <em style="color:#5f6368;font-size:13px">(Select all that apply)</em></div>
+      <div class="options">
+        <label class="option"><input type="checkbox" name="q11" value="Search"><label>Search by room number / department name</label></label>
+        <label class="option"><input type="checkbox" name="q11" value="Directions"><label>Step-by-step walking directions on a map</label></label>
+        <label class="option"><input type="checkbox" name="q11" value="Indoor nav"><label>Indoor floor-by-floor navigation</label></label>
+        <label class="option"><input type="checkbox" name="q11" value="QR codes"><label>QR codes at entrances to auto-locate yourself</label></label>
+        <label class="option"><input type="checkbox" name="q11" value="Shuttle"><label>Shuttle / bus timings</label></label>
+        <label class="option"><input type="checkbox" name="q11" value="Crowd info"><label>Real-time crowd info (canteen busy status)</label></label>
+        <label class="option"><input type="checkbox" name="q11" value="AR"><label>Augmented Reality (AR) camera navigation</label></label>
+        <label class="option"><input type="checkbox" name="q11" value="Events"><label>Event & notice location updates</label></label>
+      </div>
+    </div>
+
+    <div class="q-card" id="q12">
+      <div class="q-label">Which device would you primarily use this app on? <span class="req">*</span></div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q12" value="Android"><label>Mobile Phone (Android)</label></label>
+        <label class="option"><input type="radio" name="q12" value="iPhone"><label>Mobile Phone (iPhone)</label></label>
+        <label class="option"><input type="radio" name="q12" value="Laptop"><label>Laptop / Desktop</label></label>
+        <label class="option"><input type="radio" name="q12" value="Kiosk"><label>Display screen / Kiosk at campus entrance</label></label>
+      </div>
+      <div class="error-msg">⚠ This is a required question.</div>
+    </div>
+
+    <div class="q-card" id="q13">
+      <div class="q-label">Would you prefer the app in which language? <span class="req">*</span></div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q13" value="English"><label>English only</label></label>
+        <label class="option"><input type="radio" name="q13" value="Telugu"><label>Telugu only</label></label>
+        <label class="option"><input type="radio" name="q13" value="Both"><label>Both English & Telugu</label></label>
+        <label class="option"><input type="radio" name="q13" value="Hindi"><label>Hindi</label></label>
+      </div>
+      <div class="error-msg">⚠ This is a required question.</div>
+    </div>
+
+    <div class="q-card" id="q14">
+      <div class="q-label">How important is offline access (works without internet)? <span class="req">*</span></div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q14" value="Very important"><label>Very important — campus WiFi is unreliable</label></label>
+        <label class="option"><input type="radio" name="q14" value="Somewhat"><label>Somewhat important</label></label>
+        <label class="option"><input type="radio" name="q14" value="Not important"><label>Not important — I always have data</label></label>
+      </div>
+      <div class="error-msg">⚠ This is a required question.</div>
+    </div>
+  </div>
+
+  <!-- PAGE 5: Final Thoughts -->
+  <div class="page" id="page5">
+    <div class="section-card">
+      <div class="section-title">Section 5: Final Thoughts</div>
+    </div>
+
+    <div class="q-card" id="q15">
+      <div class="q-label">Would you use a Smart Campus Navigation App if it were available? <span class="req">*</span></div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q15" value="Definitely yes"><label>Definitely yes! 🙌</label></label>
+        <label class="option"><input type="radio" name="q15" value="Probably yes"><label>Probably yes</label></label>
+        <label class="option"><input type="radio" name="q15" value="Not sure"><label>Not sure</label></label>
+        <label class="option"><input type="radio" name="q15" value="Probably not"><label>Probably not</label></label>
+        <label class="option"><input type="radio" name="q15" value="No"><label>No</label></label>
+      </div>
+      <div class="error-msg">⚠ This is a required question.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Any suggestions or features you'd like to see in this app?</div>
+      <textarea class="text-input" placeholder="Share your ideas here..." rows="4"></textarea>
+    </div>
+  </div>
+
+  <!-- Submitted -->
+  <div class="submitted-card" id="submittedCard">
+    <div class="submitted-icon">✅</div>
+    <div class="submitted-title">Response Submitted!</div>
+    <div class="submitted-desc">Thank you for your valuable feedback 🙏<br>Your input will help us build a better campus navigation experience for everyone at our college.</div>
+    <button class="btn btn-secondary" onclick="resetForm()">Submit another response</button>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-card" id="navCard">
+    <div>
+      <button class="btn btn-clear" onclick="clearForm()">Clear form</button>
+    </div>
+    <div>
+      <button class="btn btn-primary" onclick="submitForm()">Submit ✓</button>
+    </div>
+  </div>
+
+  <div class="google-footer">
+    <p>Built for DTI Project · Smart Campus Navigation · Engineering College</p>
+    <p style="margin-top:4px;font-size:11px;color:#9aa0a6">Never submit passwords through this form</p>
+  </div>
+
+</div>
+
+<script>
+  const allRequired = [
+    { id: 'q1', type: 'radio', name: 'q1' },
+    { id: 'q2', type: 'text', inputId: 'q2input' },
+    { id: 'q3', type: 'radio', name: 'q3' },
+    { id: 'q4', type: 'radio', name: 'q4' },
+    { id: 'q7', type: 'radio', name: 'q7' },
+    { id: 'q8', type: 'radio', name: 'q8' },
+    { id: 'q9', type: 'radio', name: 'q9' },
+    { id: 'q12', type: 'radio', name: 'q12' },
+    { id: 'q13', type: 'radio', name: 'q13' },
+    { id: 'q14', type: 'radio', name: 'q14' },
+    { id: 'q15', type: 'radio', name: 'q15' },
+  ];
+
+  function submitForm() {
+    let valid = true;
+    let firstErr = null;
+    allRequired.forEach(r => {
+      const card = document.getElementById(r.id);
+      card.classList.remove('error');
+      let ok = false;
+      if (r.type === 'radio') ok = !!document.querySelector(`input[name="${r.name}"]:checked`);
+      else if (r.type === 'text') ok = !!document.getElementById(r.inputId).value.trim();
+      if (!ok) { card.classList.add('error'); valid = false; if (!firstErr) firstErr = card; }
+    });
+    if (!valid) { firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    document.getElementById('navCard').style.display = 'none';
+    document.getElementById('submittedCard').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function clearForm() {
+    document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(i => i.checked = false);
+    document.querySelectorAll('input[type="text"], textarea').forEach(i => i.value = '');
+    document.querySelectorAll('.q-card.error').forEach(c => c.classList.remove('error'));
+  }
+
+  function resetForm() {
+    clearForm();
+    document.getElementById('submittedCard').style.display = 'none';
+    document.getElementById('navCard').style.display = 'flex';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.querySelectorAll('input, textarea').forEach(el => {
+    el.addEventListener('change', () => el.closest('.q-card')?.classList.remove('error'));
+    el.addEventListener('input', () => el.closest('.q-card')?.classList.remove('error'));
+  });
+
+  // Hide progress bar
+  document.getElementById('progressFill').parentElement.style.display = 'none';
+  document.getElementById('progressText').style.display = 'none';
+</script>
+</body>
+</html>
