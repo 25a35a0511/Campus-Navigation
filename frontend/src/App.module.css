@@ -1,0 +1,45 @@
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+
+.topbar {
+  height: 60px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.brand { display: flex; align-items: center; gap: 10px; margin-right: 12px; }
+.brandIcon { font-size: 26px; }
+.brandName { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--txt); display: block; line-height: 1.1; }
+.brandSub  { font-size: 9px; color: var(--txt3); font-weight: 400; letter-spacing: 0.5px; text-transform: uppercase; display: block; }
+
+.navLinks { display: flex; gap: 4px; flex: 1; }
+
+.navLink {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--txt2);
+  transition: all 0.15s;
+}
+.navLink:hover { color: var(--txt); background: var(--bg4); }
+.navActive { color: var(--accent) !important; background: var(--accent-lo) !important; }
+
+.navBadge {
+  margin-left: auto;
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
