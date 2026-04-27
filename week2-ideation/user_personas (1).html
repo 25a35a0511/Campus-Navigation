@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Personas – Smart Campus Navigation</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #0f0f1a;
+  min-height: 100vh;
+  padding: 0 0 60px;
+}
+
+.top-bar {
+  background: #1a1a2e;
+  border-bottom: 1px solid #2a2a40;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.top-bar h1 { color: #e2e2f0; font-size: 15px; font-weight: 600; }
+.badge { background: #8b5cf6; color: white; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+
+.canvas {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 28px;
+}
+
+.persona-card {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  transition: transform 0.3s, box-shadow 0.3s;
+  animation: fadeUp 0.5s ease both;
+}
+
+.persona-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+}
+
+.persona-card:nth-child(1) { animation-delay: 0.1s; }
+.persona-card:nth-child(2) { animation-delay: 0.2s; }
+.persona-card:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Hero */
+.persona-hero {
+  padding: 28px 24px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.persona-avatar {
+  width: 70px; height: 70px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+  flex-shrink: 0;
+}
+
+.persona-intro { flex: 1; }
+
+.persona-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: white;
+  margin-bottom: 2px;
+}
+
+.persona-role {
+  font-size: 12px;
+  opacity: 0.7;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.persona-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.persona-tag {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+/* Quote */
+.persona-quote {
+  margin: 0 24px;
+  background: rgba(255,255,255,0.08);
+  border-left: 3px solid rgba(255,255,255,0.4);
+  padding: 12px 14px;
+  border-radius: 0 10px 10px 0;
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* Body */
+.persona-body {
+  background: #1a1a2e;
+  margin-top: 20px;
+  padding: 20px 24px;
+}
+
+.section-row {
+  margin-bottom: 18px;
+}
+
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #6b6b8e;
+  margin-bottom: 10px;
+}
+
+/* Goals */
+.goal-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.goal-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.goal-text { font-size: 12px; color: #c4c4e0; line-height: 1.5; }
+
+/* Pain points */
+.pain-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.pain-text { font-size: 12px; color: #c4c4e0; line-height: 1.5; }
+
+/* Tech bar */
+.tech-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.tech-label { font-size: 11px; color: #9898b8; width: 90px; flex-shrink: 0; }
+.tech-bar { flex: 1; height: 6px; background: #2a2a40; border-radius: 3px; overflow: hidden; }
+.tech-fill { height: 100%; border-radius: 3px; }
+
+/* Motivation bar */
+.motivation-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.motivation-item {
+  background: #12122a;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.motivation-icon { font-size: 18px; }
+.motivation-text { font-size: 11px; color: #9898b8; line-height: 1.4; }
+
+/* Divider */
+.divider { height: 1px; background: #2a2a40; margin: 16px 0; }
+
+/* Color themes */
+.theme-blue .persona-hero { background: linear-gradient(135deg, #1e3a8a, #1e40af); }
+.theme-blue .persona-avatar { background: rgba(255,255,255,0.15); }
+.theme-blue .goal-dot { background: #60a5fa; }
+.theme-blue .tech-fill { background: linear-gradient(90deg, #3b82f6, #06b6d4); }
+
+.theme-emerald .persona-hero { background: linear-gradient(135deg, #064e3b, #065f46); }
+.theme-emerald .persona-avatar { background: rgba(255,255,255,0.15); }
+.theme-emerald .goal-dot { background: #34d399; }
+.theme-emerald .tech-fill { background: linear-gradient(90deg, #10b981, #06b6d4); }
+
+.theme-purple .persona-hero { background: linear-gradient(135deg, #3b0764, #4c1d95); }
+.theme-purple .persona-avatar { background: rgba(255,255,255,0.15); }
+.theme-purple .goal-dot { background: #c084fc; }
+.theme-purple .tech-fill { background: linear-gradient(90deg, #8b5cf6, #ec4899); }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>👤 User Personas — Smart Campus Navigation</h1>
+  <span class="badge">DTI · WEEK 2</span>
+</div>
+
+<div class="canvas">
+
+  <!-- PERSONA 1 -->
+  <div class="persona-card theme-blue">
+    <div class="persona-hero">
+      <div class="persona-avatar">👨‍💻</div>
+      <div class="persona-intro">
+        <div class="persona-name">Arjun Reddy</div>
+        <div class="persona-role">1st Year B.Tech CSE · 18 years old · Hyderabad</div>
+        <div class="persona-tags">
+          <span class="persona-tag">New Student</span>
+          <span class="persona-tag">Android User</span>
+          <span class="persona-tag">Tech Savvy</span>
+        </div>
+      </div>
+    </div>
+    <div class="persona-quote">"I've been late to 3 classes already because I can't find the labs. The campus is huge and all the blocks look the same to me!"</div>
+    <div class="persona-body">
+      <div class="section-row">
+        <div class="section-label">🎯 Goals</div>
+        <div class="goal-item"><div class="goal-dot" style="background:#60a5fa;"></div><div class="goal-text">Find any classroom or lab within 2 minutes</div></div>
+        <div class="goal-item"><div class="goal-dot" style="background:#60a5fa;"></div><div class="goal-text">Learn the campus layout quickly in first semester</div></div>
+        <div class="goal-item"><div class="goal-dot" style="background:#60a5fa;"></div><div class="goal-text">Never be late to class due to navigation issues</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-row">
+        <div class="section-label">😤 Pain Points</div>
+        <div class="pain-item"><span>❌</span><div class="pain-text">All buildings look the same — no clear signage</div></div>
+        <div class="pain-item"><span>❌</span><div class="pain-text">Google Maps doesn't work for indoor navigation</div></div>
+        <div class="pain-item"><span>❌</span><div class="pain-text">Embarrassed to keep asking seniors for directions</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-row">
+        <div class="section-label">📊 Tech Comfort</div>
+        <div class="tech-row"><span class="tech-label">Smartphone</span><div class="tech-bar"><div class="tech-fill" style="width:95%;"></div></div></div>
+        <div class="tech-row"><span class="tech-label">Apps</span><div class="tech-bar"><div class="tech-fill" style="width:90%;"></div></div></div>
+        <div class="tech-row"><span class="tech-label">Maps</span><div class="tech-bar"><div class="tech-fill" style="width:80%;"></div></div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label">💡 Needs from App</div>
+      <div class="motivation-grid">
+        <div class="motivation-item"><span class="motivation-icon">🔍</span><div class="motivation-text">Fast room search</div></div>
+        <div class="motivation-item"><span class="motivation-icon">🧭</span><div class="motivation-text">Step-by-step directions</div></div>
+        <div class="motivation-item"><span class="motivation-icon">📶</span><div class="motivation-text">Offline mode</div></div>
+        <div class="motivation-item"><span class="motivation-icon">🗺️</span><div class="motivation-text">Full campus map</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSONA 2 -->
+  <div class="persona-card theme-emerald">
+    <div class="persona-hero">
+      <div class="persona-avatar">👩‍👧</div>
+      <div class="persona-intro">
+        <div class="persona-name">Lakshmi Devi</div>
+        <div class="persona-role">Parent · 44 years old · Vijayawada</div>
+        <div class="persona-tags">
+          <span class="persona-tag">Visitor</span>
+          <span class="persona-tag">Low Tech</span>
+          <span class="persona-tag">Telugu Speaker</span>
+        </div>
+      </div>
+    </div>
+    <div class="persona-quote">"I came to meet my son's HOD during parent's day. I wandered for 30 minutes and finally had to call my son to come find me near the gate."</div>
+    <div class="persona-body">
+      <div class="section-row">
+        <div class="section-label">🎯 Goals</div>
+        <div class="goal-item"><div class="goal-dot" style="background:#34d399;"></div><div class="goal-text">Find specific faculty office or admin block easily</div></div>
+        <div class="goal-item"><div class="goal-dot" style="background:#34d399;"></div><div class="goal-text">Use the app in Telugu language</div></div>
+        <div class="goal-item"><div class="goal-dot" style="background:#34d399;"></div><div class="goal-text">Navigate independently without troubling students</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-row">
+        <div class="section-label">😤 Pain Points</div>
+        <div class="pain-item"><span>❌</span><div class="pain-text">Campus is very large and unfamiliar for visitors</div></div>
+        <div class="pain-item"><span>❌</span><div class="pain-text">No staff or volunteers to guide visitors</div></div>
+        <div class="pain-item"><span>❌</span><div class="pain-text">English-only signboards — hard to read</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-row">
+        <div class="section-label">📊 Tech Comfort</div>
+        <div class="tech-row"><span class="tech-label">Smartphone</span><div class="tech-bar"><div class="tech-fill" style="width:40%;"></div></div></div>
+        <div class="tech-row"><span class="tech-label">Apps</span><div class="tech-bar"><div class="tech-fill" style="width:30%;"></div></div></div>
+        <div class="tech-row"><span class="tech-label">Maps</span><div class="tech-bar"><div class="tech-fill" style="width:20%;"></div></div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label">💡 Needs from App</div>
+      <div class="motivation-grid">
+        <div class="motivation-item"><span class="motivation-icon">🌐</span><div class="motivation-text">Telugu language option</div></div>
+        <div class="motivation-item"><span class="motivation-icon">🖼️</span><div class="motivation-text">Simple visual UI</div></div>
+        <div class="motivation-item"><span class="motivation-icon">📺</span><div class="motivation-text">Kiosk at entrance</div></div>
+        <div class="motivation-item"><span class="motivation-icon">📞</span><div class="motivation-text">Contact directory</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSONA 3 -->
+  <div class="persona-card theme-purple">
+    <div class="persona-hero">
+      <div class="persona-avatar">👩‍🏫</div>
+      <div class="persona-intro">
+        <div class="persona-name">Dr. Priya Sharma</div>
+        <div class="persona-role">Assistant Professor · ECE Dept · 32 years old</div>
+        <div class="persona-tags">
+          <span class="persona-tag">Faculty</span>
+          <span class="persona-tag">New Joiner</span>
+          <span class="persona-tag">iPhone User</span>
+        </div>
+      </div>
+    </div>
+    <div class="persona-quote">"I joined this college 2 months ago. I still get confused between Block A and Block B. I have to search for seminar halls every time there's an event."</div>
+    <div class="persona-body">
+      <div class="section-row">
+        <div class="section-label">🎯 Goals</div>
+        <div class="goal-item"><div class="goal-dot" style="background:#c084fc;"></div><div class="goal-text">Find seminar halls, conference rooms quickly</div></div>
+        <div class="goal-item"><div class="goal-dot" style="background:#c084fc;"></div><div class="goal-text">Know which floor a specific lab or department is on</div></div>
+        <div class="goal-item"><div class="goal-dot" style="background:#c084fc;"></div><div class="goal-text">Share exact location with students easily</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-row">
+        <div class="section-label">😤 Pain Points</div>
+        <div class="pain-item"><span>❌</span><div class="pain-text">New to campus — still learning building layout</div></div>
+        <div class="pain-item"><span>❌</span><div class="pain-text">Room numbers don't follow a logical pattern</div></div>
+        <div class="pain-item"><span>❌</span><div class="pain-text">Wastes class time when students can't find her room</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-row">
+        <div class="section-label">📊 Tech Comfort</div>
+        <div class="tech-row"><span class="tech-label">Smartphone</span><div class="tech-bar"><div class="tech-fill" style="width:85%;"></div></div></div>
+        <div class="tech-row"><span class="tech-label">Apps</span><div class="tech-bar"><div class="tech-fill" style="width:80%;"></div></div></div>
+        <div class="tech-row"><span class="tech-label">Maps</span><div class="tech-bar"><div class="tech-fill" style="width:75%;"></div></div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label">💡 Needs from App</div>
+      <div class="motivation-grid">
+        <div class="motivation-item"><span class="motivation-icon">🔗</span><div class="motivation-text">Share location link</div></div>
+        <div class="motivation-item"><span class="motivation-icon">🏢</span><div class="motivation-text">Floor-wise map view</div></div>
+        <div class="motivation-item"><span class="motivation-icon">📅</span><div class="motivation-text">Event room finder</div></div>
+        <div class="motivation-item"><span class="motivation-icon">⭐</span><div class="motivation-text">Save favourite rooms</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

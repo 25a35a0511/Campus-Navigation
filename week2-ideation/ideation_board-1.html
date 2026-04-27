@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ideation Board – Smart Campus Navigation</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #1a1a2e;
+  min-height: 100vh;
+  padding: 0 0 60px;
+}
+
+.top-bar {
+  background: #2c2c3e;
+  border-bottom: 1px solid #3d3d55;
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.top-bar-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.board-badge {
+  background: #f59e0b;
+  color: #1a1a1a;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+.top-bar h1 {
+  color: #e2e2f0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.phase-tags {
+  display: flex;
+  gap: 8px;
+}
+
+.phase-tag {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.tag-empathize { background: #1e3a5f; color: #60a5fa; }
+.tag-define { background: #3b1f5e; color: #c084fc; }
+.tag-ideate { background: #1e4d3b; color: #34d399; }
+
+/* Canvas */
+.canvas {
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+/* Section */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.section-num {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #e2e2f0;
+}
+
+.section-sub {
+  font-size: 13px;
+  color: #6b6b8e;
+  margin-top: 2px;
+}
+
+/* HMW cards */
+.hmw-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.hmw-card {
+  background: #ffd60a;
+  border-radius: 4px;
+  padding: 20px 18px 28px;
+  position: relative;
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.hmw-card:hover {
+  transform: rotate(0deg) translateY(-4px);
+  box-shadow: 6px 8px 0 rgba(0,0,0,0.3);
+}
+
+.hmw-card:nth-child(2n) { transform: rotate(-1deg); background: #fbbf24; }
+.hmw-card:nth-child(3n) { transform: rotate(1.5deg); background: #fde68a; }
+.hmw-card:nth-child(4n) { transform: rotate(-0.5deg); }
+.hmw-card:nth-child(2n):hover { transform: rotate(0deg) translateY(-4px); }
+.hmw-card:nth-child(3n):hover { transform: rotate(0deg) translateY(-4px); }
+
+.hmw-label {
+  font-family: 'Caveat', cursive;
+  font-size: 12px;
+  font-weight: 700;
+  color: #92400e;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.hmw-text {
+  font-family: 'Caveat', cursive;
+  font-size: 19px;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.4;
+}
+
+.hmw-pin {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px; height: 14px;
+  background: #ef4444;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+/* Idea cards grid */
+.ideas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.idea-card {
+  border-radius: 12px;
+  padding: 16px;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.idea-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
+
+.idea-emoji { font-size: 28px; margin-bottom: 10px; display: block; }
+.idea-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.idea-desc { font-size: 11px; line-height: 1.5; opacity: 0.85; }
+
+.idea-votes {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 20px;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Color variants */
+.idea-blue { background: #1e3a8a; color: #bfdbfe; }
+.idea-teal { background: #134e4a; color: #99f6e4; }
+.idea-purple { background: #3b0764; color: #e9d5ff; }
+.idea-green { background: #14532d; color: #bbf7d0; }
+.idea-orange { background: #7c2d12; color: #fed7aa; }
+.idea-pink { background: #500724; color: #fecdd3; }
+.idea-indigo { background: #1e1b4b; color: #c7d2fe; }
+.idea-amber { background: #451a03; color: #fde68a; }
+
+/* Crazy 8 section */
+.crazy8-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: #3d3d55;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.c8-cell {
+  background: #2c2c3e;
+  padding: 20px 16px;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.c8-cell:hover { background: #35354a; }
+
+.c8-num {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #4f46e5;
+  letter-spacing: 1px;
+}
+
+.c8-sketch {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+.c8-label {
+  font-family: 'Caveat', cursive;
+  font-size: 14px;
+  color: #9898b8;
+  text-align: center;
+}
+
+/* Vote dots */
+.vote-row {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+}
+.vote-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #f59e0b;
+}
+.vote-dot.empty { background: #3d3d55; }
+
+/* Priority 2x2 */
+.matrix-wrap {
+  background: #2c2c3e;
+  border-radius: 16px;
+  padding: 24px;
+  position: relative;
+}
+
+.matrix-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 3px;
+  height: 380px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.matrix-quad {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.mq-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.mq-tl { background: #1e3a8a; }
+.mq-tr { background: #14532d; }
+.mq-bl { background: #451a03; }
+.mq-br { background: #3b1f5e; }
+
+.mq-tl .mq-label { color: #93c5fd; }
+.mq-tr .mq-label { color: #86efac; }
+.mq-bl .mq-label { color: #fdba74; }
+.mq-br .mq-label { color: #d8b4fe; }
+
+.mq-item {
+  background: rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.matrix-axis-x {
+  text-align: center;
+  color: #6b6b8e;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.matrix-axis-y {
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateX(-50%) rotate(-90deg);
+  color: #6b6b8e;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Insight cards */
+.insights-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.insight-card {
+  background: #2c2c3e;
+  border-radius: 12px;
+  padding: 18px;
+  border-left: 4px solid;
+  transition: transform 0.2s;
+}
+
+.insight-card:hover { transform: translateY(-3px); }
+
+.insight-card h4 { font-size: 13px; font-weight: 700; color: #e2e2f0; margin-bottom: 6px; }
+.insight-card p { font-size: 11px; color: #9898b8; line-height: 1.6; }
+.insight-pct { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+
+@media (max-width: 768px) {
+  .crazy8-grid { grid-template-columns: repeat(2, 1fr); }
+  .canvas { padding: 24px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-bar-title">
+    <span class="board-badge">WEEK 2</span>
+    <h1>Ideation Board — Smart Campus Navigation</h1>
+  </div>
+  <div class="phase-tags">
+    <span class="phase-tag tag-empathize">Empathize ✓</span>
+    <span class="phase-tag tag-define">Define ✓</span>
+    <span class="phase-tag tag-ideate">Ideate ← Now</span>
+  </div>
+</div>
+
+<div class="canvas">
+
+  <!-- SECTION 1: HMW -->
+  <div>
+    <div class="section-header">
+      <div class="section-num" style="background:#ffd60a;color:#1a1a1a;">1</div>
+      <div>
+        <div class="section-title">How Might We (HMW) Statements</div>
+        <div class="section-sub">Reframing user pain points into design opportunities</div>
+      </div>
+    </div>
+    <div class="hmw-grid">
+      <div class="hmw-card">
+        <div class="hmw-pin"></div>
+        <div class="hmw-label">HMW #1</div>
+        <div class="hmw-text">How might we help new students find any classroom within 2 minutes?</div>
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-pin"></div>
+        <div class="hmw-label">HMW #2</div>
+        <div class="hmw-text">How might we make campus navigation work even without internet?</div>
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-pin"></div>
+        <div class="hmw-label">HMW #3</div>
+        <div class="hmw-text">How might we help visitors find the right department on a large campus?</div>
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-pin"></div>
+        <div class="hmw-label">HMW #4</div>
+        <div class="hmw-text">How might we reduce the time students spend asking for directions?</div>
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-pin"></div>
+        <div class="hmw-label">HMW #5</div>
+        <div class="hmw-text">How might we guide students floor-by-floor inside large buildings?</div>
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-pin"></div>
+        <div class="hmw-label">HMW #6</div>
+        <div class="hmw-text">How might we notify students when a class room or lab changes location?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Crazy 8 -->
+  <div>
+    <div class="section-header">
+      <div class="section-num" style="background:#4f46e5;color:white;">2</div>
+      <div>
+        <div class="section-title">Crazy 8s — Rapid Sketching</div>
+        <div class="section-sub">8 ideas in 8 minutes — quantity over quality</div>
+      </div>
+    </div>
+    <div class="crazy8-grid">
+      <div class="c8-cell">
+        <div class="c8-num">IDEA 01</div>
+        <div class="c8-sketch">🗺️</div>
+        <div class="c8-label">Interactive Campus Map</div>
+        <div class="vote-row">
+          <div class="vote-dot"></div><div class="vote-dot"></div><div class="vote-dot"></div><div class="vote-dot empty"></div><div class="vote-dot empty"></div>
+        </div>
+      </div>
+      <div class="c8-cell">
+        <div class="c8-num">IDEA 02</div>
+        <div class="c8-sketch">📱</div>
+        <div class="c8-label">QR Code at Each Entry</div>
+        <div class="vote-row">
+          <div class="vote-dot"></div><div class="vote-dot"></div><div class="vote-dot"></div><div class="vote-dot"></div><div class="vote-dot empty"></div>
+        </div>
+      </div>
+      <div class="c8-cell">
+        <div class="c8-num">IDEA 03</div>
+        <div class="c8-sketch">🔍</div>
+        <div class="c8-label">Voice Search Navigation</div>
+        <div class="vote-row">
+          <div class="vote-dot"></div><div class="vote-dot"></div><div class="vote-dot empty"></div><div class="vote-dot empty"></div><div class="vote-dot empty"></div>
+        </div>
+      </div>
+      <div class="c8-cell">
+        <div class="c8-num">IDEA 04</div>
+        <div class="c8-sketch">📡</div>
+        <div class="c8-label">Bluetooth Beacon Indoor Nav</div>
+        <div class="vote-row">
+          <div class="vote-dot"></div><div class="vote-dot empty"></div><div class="vote-dot empty"></div><div class="vote-dot empty"></div><div class="vote-dot empty"></div>
+        </div>
+      </div>
+      <div class="c8-cell">
+        <div class="c8-num">IDEA 05</div>
+        <div class="c8-sketch">🤖</div>
+        <div class="c8-label">AI Chatbot "Where is...?"</div>
+        <div class="vote-row">
+          <div class="vote-dot"></div><div class="vote-dot"></div><div class="vote-dot"></div><div class="vote-dot empty"></div><div class="vote-dot empty"></div>
+        </div>
+      </div>
+      <div class="c8-cell">
+        <div class="c8-num">IDEA 06</div>
+        <div class="c8-sketch">📺</div>
+        <div class="c8-label">Kiosk Screens at Entrances</div>
+        <div class="vote-row">
+          <div class="vote-dot"></div><div class="vote-dot"></div><div class="vote-dot empty"></div><div class="vote-dot empty"></div><div class="vote-dot empty"></div>
+        </div>
+      </div>
+      <div class="c8-cell">
+        <div class="c8-num">IDEA 07</div>
+        <div class="c8-sketch">📸</div>
+        <div class="c8-label">AR Camera Navigation</div>
+        <div class="vote-row">
+          <div class="vote-dot"></div><div class="vote-dot"></div><div class="vote-dot"></div><div class="vote-dot"></div><div class="vote-dot"></div>
+        </div>
+      </div>
+      <div class="c8-cell">
+        <div class="c8-num">IDEA 08</div>
+        <div class="c8-sketch">🚌</div>
+        <div class="c8-label">Shuttle + Route Tracker</div>
+        <div class="vote-row">
+          <div class="vote-dot"></div><div class="vote-dot"></div><div class="vote-dot"></div><div class="vote-dot empty"></div><div class="vote-dot empty"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Top Ideas -->
+  <div>
+    <div class="section-header">
+      <div class="section-num" style="background:#10b981;color:white;">3</div>
+      <div>
+        <div class="section-title">Top Voted Ideas — Expanded</div>
+        <div class="section-sub">After dot voting with team members (5 votes each)</div>
+      </div>
+    </div>
+    <div class="ideas-grid">
+      <div class="idea-card idea-blue">
+        <div class="idea-votes">⭐ 5</div>
+        <span class="idea-emoji">🗺️</span>
+        <div class="idea-title">Interactive Campus Map</div>
+        <div class="idea-desc">Custom map with all buildings, labs, and facilities. Tap to get directions.</div>
+      </div>
+      <div class="idea-card idea-purple">
+        <div class="idea-votes">⭐ 5</div>
+        <span class="idea-emoji">📸</span>
+        <div class="idea-title">AR Camera Navigation</div>
+        <div class="idea-desc">Point phone camera to see direction arrows overlaid on real campus view.</div>
+      </div>
+      <div class="idea-card idea-teal">
+        <div class="idea-votes">⭐ 4</div>
+        <span class="idea-emoji">📱</span>
+        <div class="idea-title">QR Code Entry Points</div>
+        <div class="idea-desc">Scan QR at building entrance to instantly know your location on map.</div>
+      </div>
+      <div class="idea-card idea-green">
+        <div class="idea-votes">⭐ 3</div>
+        <span class="idea-emoji">🔍</span>
+        <div class="idea-title">Smart Search</div>
+        <div class="idea-desc">Search by room number, faculty name, or department. Auto-complete suggestions.</div>
+      </div>
+      <div class="idea-card idea-orange">
+        <div class="idea-votes">⭐ 3</div>
+        <span class="idea-emoji">🚌</span>
+        <div class="idea-title">Shuttle Tracker</div>
+        <div class="idea-desc">Live shuttle timings and route map. Know when the next bus arrives.</div>
+      </div>
+      <div class="idea-card idea-pink">
+        <div class="idea-votes">⭐ 3</div>
+        <span class="idea-emoji">🤖</span>
+        <div class="idea-title">AI Chatbot</div>
+        <div class="idea-desc">"Where is the exam cell?" — Natural language campus assistant.</div>
+      </div>
+      <div class="idea-card idea-indigo">
+        <div class="idea-votes">⭐ 2</div>
+        <span class="idea-emoji">📺</span>
+        <div class="idea-title">Campus Kiosk</div>
+        <div class="idea-desc">Touch screen displays at main gates for visitors without smartphones.</div>
+      </div>
+      <div class="idea-card idea-amber">
+        <div class="idea-votes">⭐ 1</div>
+        <span class="idea-emoji">📡</span>
+        <div class="idea-title">Bluetooth Indoor Nav</div>
+        <div class="idea-desc">BLE beacons inside buildings for precise floor-level positioning.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Key Insights -->
+  <div>
+    <div class="section-header">
+      <div class="section-num" style="background:#f59e0b;color:#1a1a1a;">4</div>
+      <div>
+        <div class="section-title">Key Research Insights</div>
+        <div class="section-sub">From 28 survey responses collected during Week 1</div>
+      </div>
+    </div>
+    <div class="insights-row">
+      <div class="insight-card" style="border-color:#ef4444;">
+        <div class="insight-pct" style="color:#ef4444;">78%</div>
+        <h4>Lost at least once</h4>
+        <p>Of students reported being late or confused when finding a new location on campus.</p>
+      </div>
+      <div class="insight-card" style="border-color:#4f46e5;">
+        <div class="insight-pct" style="color:#4f46e5;">91%</div>
+        <h4>Use mobile phones</h4>
+        <p>Would primarily use a navigation app on their Android or iPhone on campus.</p>
+      </div>
+      <div class="insight-card" style="border-color:#10b981;">
+        <div class="insight-pct" style="color:#10b981;">84%</div>
+        <h4>Want offline access</h4>
+        <p>Said campus WiFi is unreliable so offline navigation is very important.</p>
+      </div>
+      <div class="insight-card" style="border-color:#f59e0b;">
+        <div class="insight-pct" style="color:#f59e0b;">#1</div>
+        <h4>Biggest pain point</h4>
+        <p>No proper signboards or maps available on campus — voted top challenge.</p>
+      </div>
+      <div class="insight-card" style="border-color:#8b5cf6;">
+        <div class="insight-pct" style="color:#8b5cf6;">96%</div>
+        <h4>Would use the app</h4>
+        <p>Said they would "definitely" or "probably" use a Smart Campus Navigation app.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
