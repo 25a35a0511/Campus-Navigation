@@ -3,6 +3,9 @@
 > DTI Week 2 Project — Full-stack campus navigation app built on the user personas, ideation board, and feature priority matrix.
 
 ---
+## 🎨 UI Design
+
+The user interface for this project was designed and developed directly using HTML, CSS, and JavaScript, focusing on simplicity and usability.
 
 ## 📁 Project Structure
 
